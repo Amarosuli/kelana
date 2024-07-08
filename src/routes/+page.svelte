@@ -1,48 +1,32 @@
-<script>
-	import { searchLayer } from '$lib/stores';
+<script lang="ts">
+	import { getContext } from 'svelte';
+	import { provinces } from '$lib/constant';
 	import { scale } from 'svelte/transition';
+	import type { Writable } from 'svelte/store';
 
-	const kota = [
-		{
-			name: 'Jakarta'
-		},
-		{
-			name: 'Samarinda'
-		},
-		{
-			name: 'Balikpapan'
-		},
-		{
-			name: 'Bengkulu'
-		}
-	];
-
-	function searchOnClick() {
-		$searchLayer = true;
-	}
+	let { isOpen }: { isOpen: Writable<boolean> } = getContext('searchLayer');
 </script>
 
-<div class="w-full flex border-b border-biru px-10 justify-between h-20 items-center">
-	<a href="/">
-		<span class="text-2xl font-bold tracking-wider uppercase text-biru transition-colors ease-in-out">kelana</span>
-	</a>
-	<div class="hidden">
-		<input type="text" placeholder="search..." />
-	</div>
-</div>
-<div class="flex w-full justify-center items-center border border-biru border-t-0">
+<!-- <div class="flex w-full justify-center items-center border border-biru border-t-0">
 	<img class="w-[900px]" src="./map.jpeg" alt="map" />
-</div>
+</div> -->
 
-<section class="fixed bottom-10 left-0 p-4 justify-center items-center w-full flex flex-col">
-	<div class="xl:w-1/2 w-full">
-		<h1 class="w-full text-xl font-bold tracking-wider text-center xl:text-left text-biru pb-3">Mau Kemana Guys?</h1>
-		<input class="w-full py-4 px-6 bg-slate-200 rounded-xl" type="text" placeholder="Ketik aja kota yang mau kamu lihat..." on:click={searchOnClick} />
-		<div class="w-full grid grid-cols-2 lg:grid-cols-3 pt-3 gap-3">
-			{#key kota}
-				{#each kota as k}
-					<div transition:scale={{ duration: 300 }} class="bg-sky-300 h-12 flex items-center justify-center rounded-xl">
-						<span>{k.name}</span>
+<section class="flex flex-col w-full justify-center items-center mt-6 gap-4">
+	<h1 class="font-extrabold text-3xl">Indonesia</h1>
+	<!-- TODO: p tag bellow should kind of slider images, but it's quick info -->
+	<p class="w-1/3 text-center text-biru">Indonesia, officially the Republic of Indonesia, is a country in Southeast Asia and Oceania between the Indian and Pacific oceans. It consists of over 17,000 islands, including Sumatra, Java, Sulawesi, and parts of Borneo and New Guinea.</p>
+</section>
+
+<section class="fixed bottom-10 left-0 flex w-full flex-col items-center justify-center p-4">
+	<div class="w-full xl:w-1/2">
+		<h1 class="w-full pb-3 text-center text-xl font-bold tracking-wider text-biru xl:text-left">Mau Kemana Guys?</h1>
+		<input class="w-full rounded-xl bg-slate-200 px-6 py-4" type="text" placeholder="Ketik aja kota yang mau kamu lihat..." on:click={() => ($isOpen = true)} />
+		<div class="grid w-full grid-cols-2 gap-3 pt-3 lg:grid-cols-3">
+			<!-- TODO: this should only show top country, food, or something like that -->
+			{#key provinces}
+				{#each provinces as province}
+					<div transition:scale={{ duration: 300 }} class="flex h-12 items-center justify-center rounded-xl bg-sky-300">
+						<span>{province.name}</span>
 					</div>
 				{/each}
 			{/key}
